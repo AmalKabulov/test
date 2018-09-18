@@ -1,10 +1,6 @@
 package com.ititon.datacraw.controller;
 
-import com.ititon.datacraw.model.Patent;
 import com.ititon.datacraw.model.SearchField;
-import com.ititon.datacraw.service.impl.PatenInitializer2;
-import com.ititon.datacraw.service.impl.PatentInitializer;
-import com.ititon.datacraw.service.impl.PatentServiceImpl;
 import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
@@ -22,11 +18,16 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.PreDestroy;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
-import java.time.LocalDate;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 @RestController
 public class PatentCrawController2 {
@@ -34,11 +35,11 @@ public class PatentCrawController2 {
     @Autowired
     private ChromeDriverService chromeDriverService;
 
-    @Autowired
-    private PatenInitializer2 patentInitializer;
-
-    @Autowired
-    private PatentServiceImpl patentService;
+//    @Autowired
+//    private PatenInitializer2 patentInitializer;
+//
+//    @Autowired
+//    private PatentServiceImpl patentService;
 
     private final String systemDownloadLocation;
 
@@ -163,7 +164,7 @@ public class PatentCrawController2 {
     @GetMapping("/patent/search")
     public ResponseEntity patentSearch() throws InterruptedException, IOException {
 
-        AtomicInteger page = new AtomicInteger(9155);
+        AtomicInteger page = new AtomicInteger(1);
         fillSearchPanel();
         savePatents(page);
 
@@ -217,7 +218,7 @@ public class PatentCrawController2 {
                 && Objects.equals(b.getText(), "下一页")).findAny();
     }
 
-    private void savePatentsFromPage(AtomicInteger page) throws InterruptedException {
+    private void savePatentsFromPage(AtomicInteger page) throws InterruptedException, IOException {
         boolean isNotEnd = true;
         while (isNotEnd) {
             wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.id("resultMode")));
@@ -269,7 +270,19 @@ public class PatentCrawController2 {
                         hiddenNamesValues.put("lanum", value);
                     }
                 }
-                patentInitializer.initAndSave(hiddenNamesValues);
+
+                List<String> collect =
+                        hiddenNamesValues.entrySet().stream().map(k -> k.getKey() + " : " + k.getValue()).collect(Collectors.toList());
+                String join = String.join("\n", collect) + "\n" + " DELIMETER " + "\n";
+
+                String fileName = "./src/main/resources/db.txt";
+
+                Files.write(
+                        Paths.get(fileName),
+                        join.getBytes(),
+                        StandardOpenOption.APPEND);
+
+//                patentInitializer.initAndSave(hiddenNamesValues);
             }
 
             if (nextButton.isPresent()) {

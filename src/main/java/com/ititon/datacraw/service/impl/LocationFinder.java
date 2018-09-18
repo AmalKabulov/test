@@ -1,25 +1,12 @@
 package com.ititon.datacraw.service.impl;
 
-import com.ititon.datacraw.model.Patent;
-import com.ititon.datacraw.model.SearchField;
 import com.ititon.datacraw.model.location.Province;
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
 import org.springframework.stereotype.Service;
 
-import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class LocationFinder {

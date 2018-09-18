@@ -1,33 +1,6 @@
 package com.ititon.datacraw.controller;
 
 
-import com.ititon.datacraw.model.Patent;
-import com.ititon.datacraw.model.SearchField;
-import com.ititon.datacraw.repository.PatentRepository;
-import com.ititon.datacraw.service.impl.PatentInitializer;
-import com.ititon.datacraw.service.impl.PatentServiceImpl;
-import org.apache.commons.io.FileUtils;
-import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeDriverService;
-import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
-
-import javax.annotation.PreDestroy;
-import java.io.File;
-import java.io.IOException;
-import java.time.LocalDate;
-import java.util.*;
-
-
 //@RestController
 public class PatentCrawController {
 
